@@ -35,5 +35,38 @@ def data():
 
 	return render_templates("data.html", form=form)
 
+
+@app.route("/index", methods=["POST"])
+def index():
+	if request.method == 'POST':
+		f = request.files['file'].read()
+		data_csv = str(f.decode("utf-8")).split('\r\n')
+		data_csv.pop()
+		data.sort()
+
+		def iter(grp, q):
+			return [grp[i:i + q] for i in range(0, len(grp), q)]
+
+		keys = []
+		groups = []
+		for k, g in itertools.groupby(data_csv, key = lambda x: x[2:26]):
+			keys.append(k)
+			groups.append(list(g))
+
+		for i in range(len(keys)):
+			groups[i]=(iter(groups[i], Quantity_on_pallet))
+
+		cases_a = [item for sublist in groups for item in sublist]
+
+
+		StopPalletNumber = StartPalletNumber - len(cases_a)
+
+		Pallets = list(range(StartPalletNumber, StopPalletNumber, -1))
+		Pallets = [str(item) for item in Pallets]
+		quantity = str(len(Pallets))
+
+
+
+
 if __name__ == "__main__"
 	app.run(debug=True)
