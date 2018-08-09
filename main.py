@@ -1,4 +1,4 @@
-from flask import Flask, render_templates, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for
 from wtforms import Form, validators, StringField
 from wtforms.validators import DataRequired
 import itertools, datetime
@@ -16,7 +16,7 @@ class DataForm(Form):
 	Shipment_id = StringField('ShipmentId', validators=[validators.required(), validators.Length(min=10, max=10)])
 
 
-@app.route("/", methods=["POST"])
+@app.route("/data", methods=["POST"])
 def data():
 	form = DataForm(request.form)
 
@@ -100,14 +100,23 @@ def index():
 			sscc = ET.SubElement(pallet, "sscc")
 			sscc.text = n
 			number_of_cases = ET.SubElement(pallet, "number_of_cases")
-			number_of_cases.text = str(len(cases_a[y]))
-			for i in cases_a[y]:
+			number_of_cases.text = str(len(cases_a[count]))
+			for i in cases_a[count]:
 				case = ET.SubElement(pallet, "case")
 				label = ET.SubElement(case, "label")
 				label.text = i
 			count+=1
 
 
+		xml_str = ET.tostring(asn, "utf-8")
+		head = '<?xml version="1.0" encoding="UTF-8"?>' + xml_str.decode("utf-8")
+		data_xml=str(Shipment_id + '.xml')
 
-if __name__ == "__main__"
+		with open(data_xml, 'w') as output:
+			print(head, file=output)
+
+	return render_template('index.html')
+
+
+if __name__ == "__main__":
 	app.run(debug=True)
