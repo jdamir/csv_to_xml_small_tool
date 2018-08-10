@@ -1,51 +1,51 @@
 {% extends "base.html" %}
 
-{% block title %}
 
-  Csv to XML  pallets tool
-
+{%  block title %}
+  CSV to XML pallets tool
 {% endblock %}
 
-<h1>
-{% block content title %}
 
-      Data
+ <h1>
+ {% block content_title %}
  
-{%  endblock %}
-</h1>
+       Data
+
+ {% endblock %}
+ </h1>
 
 
 {% block content %}
 
-<p><a href="{{url_for('index')}}"></a>File</p>
 
+<div class="col-md-6">
+    
+    <p>
+        <a href="{{ url_for('index') }}">File</a>
+    </p>
 
-<form  method="POST" action="{{ url_for('data')}}" role="form">
-	<div class="form-group">
-		<p>
-			{{form.Quantity_on_pallet.label(class='control-label')}}
-			{{form.Quantity_on_pallet}}
-		</p>
+    
+    <form action="" method="POST" action="{{ url_for('data') }} " role="form">
+        <div class="form-group">
+        <p>
+            {{ form.Quantity_on_pallet.label(class='control-label') }}<br>
+            {{ form.Quantity_on_pallet }}
+        </p>
+        <p>
+            {{ form.PalletNumber.label }}<br>
+            {{ form.PalletNumber }}
+        </p>
+        <p>
+             {{ form.Purchase_order.label }}<br>
+            {{ form.Purchase_order }} 
+        </p>
+        <p>
+             {{ form.Shipment_id.label }}<br>
+            {{ form.Shipment_id }} 
+        </p>
+        <button type="submit" onclick="redirect()" class="btn btn-success">Submit</button>
+    </div>
 
-		<p>
-			{{form.PalletNumber.label}}
-			{{form.PalletNumber}}
-		</p>
-
-		<p>
-			{{form.Purchase_order.label}}
-			{{form.Purchase_order}}
-		</p>
-
-		<p>
-			{{form.Shipment_id.label}}
-			{{form.Shipment_id}}
-		</p>
-			
-			<button type="submit" class="btn btn-success">Submit</button>
-	 </div>
-
-
-</form>
-
+    </form>
+</div>
 {% endblock %}

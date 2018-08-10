@@ -16,34 +16,37 @@ class DataForm(Form):
 	Shipment_id = StringField('ShipmentId', validators=[validators.required(), validators.Length(min=10, max=10)])
 
 
-@app.route("/data", methods=["POST"])
+@app.route("/data", methods=["POST", "GET"])
 def data():
 	form = DataForm(request.form)
 
 	global Quantity_on_pallet
 	global StartPalletNumber
 	global Purchase_order
-	global ShipmentId
+	global Shipment_id
 
 	if request.method == 'POST':
 		Quantity_on_pallet=request.form['Quantity_on_pallet']
 		StartPalletNumber=request.form['PalletNumber']
 		Purchase_order=request.form['Purchase_order']
 		Shipment_id=request.form['Shipment_id']
+		
 		Quantity_on_pallet = int(Quantity_on_pallet)
 		StartPalletNumber = int(StartPalletNumber)
 		return redirect(url_for('index'))
 
-	return render_templates("data.html", form=form)
+	return render_template("data.html", form=form)
 
 
-@app.route("/index", methods=["POST"])
+@app.route("/index", methods=["POST", "GET"])
 def index():
+	
 	if request.method == 'POST':
 		f = request.files['file'].read()
 		data_csv = str(f.decode("utf-8")).split('\r\n')
 		data_csv.pop()
-		data.sort()
+		data_csv.sort()
+		
 
 		def iter(grp, q):
 			return [grp[i:i + q] for i in range(0, len(grp), q)]
@@ -65,6 +68,7 @@ def index():
 		Pallets = list(range(StartPalletNumber, StopPalletNumber, -1))
 		Pallets = [str(item) for item in Pallets]
 		quantity = str(len(Pallets))
+
 
 		dt=str(datetime.datetime.now().strftime("%Y%m%d%H%M%S"))
 
